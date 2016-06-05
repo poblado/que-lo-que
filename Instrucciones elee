@@ -1,0 +1,156 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Instructions
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~ NOTE: This Package does -NOT- contain any Animations or Sounds. You will need to find or make your own.
+~ NOTE: For weapon use, it is recommended to set all scripts 'No Mod' to prevent tampering, this is often a requirement in RP sims.
+~ NOTE: Configuration/Setup information for individual Scripts is contained within the Comments around the Config Section of the Scripts themselves. !!!
+
+[ MAIN HAND WEAPON: ]
+
+ # Typically a hand or forearm attachment (but not required to be), the object that should be visible and doing the attacking when drawn.
+  > If there is more than one, only use one as the MainHand. Typically, this will be the right-hand side.
+  > The MainHand Weapon can also be a HUD Attachment, for things such as unarmed martial arts attacks, or enabling non-scripted weapons to act as if they were scripted.
+  
+  > NOTE: There are multiple Variants of the `[ MWS Master ] MainHand` Script. It is best to start with only one when creating your Weapon, and then create copies to replace and reconfigure the Variants.
+  > The `[ LindenDamage ]` Object is required to be added with the `[ MWS Master ] MainHand - LLCS` Script, as Linden Damage only operates on Collisions.
+
+    ##1: `[ MWS Master ] MainHand` Script ###
+    { REQUIRED: } This is the central controller, it handles Animations/Sounds and will be listening for user input.
+     > By Default, AnimationSet Configuration is first read from a Notecard named `.anim default` which you will need to create.
+     > All AnimSet Config Notecards are prefixed with `.anim` and the entire name must be in all lowercase letters.
+     -> Use the Script inside the `[ MWS Util ] AnimSet Config` Object to create your AnimSet and generate the Notecard Text. Instructions are issued on-rez.
+     --> Don't include the AnimSet Config Object or Script with your weapon, it is only used for Notecard Text generation.
+
+     > COMMAND LIST
+     -> Note that the Channel and Commands are configurable, this list assumes the Default.
+
+     -> [ All Variants ]
+      -# /1anims [option] : Loads a new AnimSet Config Notecard. Options depend entirely upon the available Notecards.
+      --> You exclude the Prefix for this Command. Ex; To activate the `.anim default` Notecard, you use "/4anims default", however the command is not case-sensitive.
+      -# /1ambient : Toggles use of the Ambient Sound (a sound that is played on a loop while the weapon is Drawn.)
+      -# /1particle : Toggles use of Hit Effects (an object that is rezzed upon striking another Avatar.) and any other Particle Effects.
+      -# /1primcache : Instructs any Plugins that store Prims to change or target, such as the MultiAlpha, MultiColor and MultiGlow to refresh their Cache. Use after changing the Linkset.
+
+     -> [ All Variants - hard-coded Commands ] Primarily intended for HUD Button or Plugin use, rather than end-user use. (Their channel, however, is still Configurable.)
+      -# /1owsto : Toggles Draw/Sheath of the Weapon.
+      -# /1owsdr : Draws the Weapon.
+      -# /1owssh : Sheathes the Weapon.
+      -# /1modes : Reports current settings to the user.
+
+     -> [ CCS/DCS Variant ]
+      -# /1[type] : Toggles Draw/Sheath of the Weapon. Type depends upon a Configuration setting.
+      -# /1draw <type>: Draws the Weapon. Type is optional, for compatibility with GM/ML gestures.
+      -# /1sheath <type>: Sheathes the Weapon. Type is optional, for compatibility with GM/ML gestures.
+      -# /1combat : Toggles between CCS and DCS CombatSystem Modes.
+      -# /1dcsbridge : Toggles use of the DCS Personal Channel Bridge feature.
+
+     -> [ GM/ML Variant ]
+      -# /1draw [type] : Draws the Weapon. Type depends upon a Configuration setting.
+      -# /1sheath [type] : Sheathes the Weapon. Type depends upon a Configuration setting.
+      -# /1combat : Toggles between GM and ML CombatSystem Modes.
+      -# /1stats [option] : If configured, there are multiple Stats Options. Option is any whole number from 1 to 2147483647.
+      -# /1hits : Toggles use of the Hit Reports (to the user) feature.
+
+     -> [ LLCS Variant ]
+      -# /1[type] : Toggles Draw/Sheath of the Weapon. Type depends upon a Configuration setting.
+      -# /1draw <type>: Draws the Weapon. Type is optional, for compatibility with GM/ML gestures.
+      -# /1sheath <type>: Sheathes the Weapon. Type is optional, for compatibility with GM/ML gestures.
+      -# /1control : Toggle between LeftMouseOnly and LeftMouseArrow Control Modes.
+      -# /1llcs [number] : Sets the damage dealt by attacks.
+
+     -> Installed Plugins may add additional Commands.
+
+     > CONTROL MODES
+     -> LeftMouseOnly : Attacks are made by simply pressing the Left Mouse Button. Used by NexusCS and commonly used in GM/ML and similar systems.
+     -> LeftMouseArrow : Attacks are made when holding the Left Mouse Button and pressing a Direction Key or WASD. Used by DCS and similar systems.
+     -> 3rdPersonLeftMouseArrow : Intended for CCS, it behaves identically to Left Mouse Arrow, except 3rd Person only, it will not attack while in Mouselook.
+
+    ##2: `[ MWS Plugin ] MenuControl` Script ###
+    { OPTIONAL: } This controls Dialog Menus, if you wish to use them.
+     > Configuration is read from a Notecard named `.menu` which you will need to create.
+      -> Configuration details and a brief example are in comments at the very bottom of the Script.
+     > Adds the following Commands when installed. The Commands are hard-coded while the Channel is configurable from the MainHand Master.
+     -# /1menu : Opens the Dialog Menu.
+     -# /1menureload : Reloads the Dialog Menu Configuration.
+     -# /1menudelete : Deletes the MenuControl Script. THIS CANNOT BE UNDONE, MAKE SURE YOU HAVE A BACKUP BEFORE USING!
+
+    ##3: `[ MWS Plugin ] MultiAlpha` Script ###
+    { OPTIONAL: } This Script handles Alpha (transparancy) changes on draw/sheath.
+     > Only one copy of this script is needed for the whole object!
+
+    ##4: `[ MWS Plugin ] MultiColor` Script ###
+    { OPTIONAL: } This Script offers the end-user the ability to change the Color of parts via a command.
+     > Only one copy of this script is needed for the whole object!
+     > Adds the following Commands when installed. The Commands are hard-coded while the Channel is configurable from the MainHand Master.
+     -# /1color <zone> [color]
+     --> Zone Options depend on how Tags are set up on the Object. When using the *C# Tags, the # is the Zone Number to use. You can also Configure Names for Zones for use with this Command.
+     --> Color Options are any of the following:
+     ---> An entry from the HTML Color List: http://www.w3schools.com/HTML/html_colornames.asp
+     ---> Vector Format {'<R,G,B>'} where RGB are floats from 0.0 to 1.0
+     ---> RGB Format {'R,G,B'} where RGB are integers from 0 to 255
+     ---> Hex Format {'#RRGGBB'} where RGB are Hex integers from 00 to FF
+     -# /1colordelete : Deletes the MultiColor Script. THIS CANNOT BE UNDONE, MAKE SURE YOU HAVE A BACKUP BEFORE USING!
+
+    ##5: `[ MWS Plugin ] MultiGlow` Script ###
+    { OPTIONAL: } This Script handles Glow changes on draw/sheath.
+     > Only one copy of this script is needed for the whole object!
+
+    ##6: `[ MWS Slave ] ParticleSource` Script ###
+    { OPTIONAL: } This is a simple slave-Script for llParticleSystem.
+     > Unlike MultiAlpha/Color/Glow, you will need to place a copy of this script in each prim that uses it.
+
+    ##7: `[ MWS Slave ] TextureAnimation` Script ###
+    { OPTIONAL: } This is a simple slave-Script for llSetTextureAnim.
+     > Unlike MultiAlpha/Color/Glow, you will need to place a copy of this script in each prim that uses it.
+
+[ OFF HAND WEAPON: ]
+
+ # If your set has more than one Weapon (such as two swords, wrist blades, etc.) all of them except the one you chose for the MainHand will be an OffHand Object.
+  > If you only have one Weapon (such as a single large sword, even if it's animations are two-handed) you can completely disregard this part.
+
+    ##1: `[ MWS Master ] OffHand` Script ###
+    { REQUIRED: } This script is the controller for the Off Hand Weapon, it communicates with the Main Hand Weapon.
+
+    ##2: `[ MWS Plugin ] MultiAlpha` Script ###
+    ##3: `[ MWS Plugin ] MultiColor` Script ###
+    ##4: `[ MWS Plugin ] MultiGlow` Script ###
+    ##5: `[ MWS Slave ] ParticleSource` Script ###
+    ##6: `[ MWS Slave ] TextureAnimation` Script ###
+    { OPTIONAL: } All the same as in the Main Hand section.
+
+[ SHEATH ATTACHMENT: ]
+
+ # You can use more than one Sheath attachment, if you wish.
+
+    ##1: `[ MWS Master ] Sheath` Script ###
+    { REQUIRED: } This script is the controller for the Sheath, it communicates with the Main Hand Weapon.
+
+    ##2: `[ MWS Plugin ] MultiAlpha` Script ###
+    ##3: `[ MWS Plugin ] MultiColor` Script ###
+    ##4: `[ MWS Plugin ] MultiGlow` Script ###
+    ##5: `[ MWS Slave ] ParticleSource` Script ###
+    ##6: `[ MWS Slave ] TextureAnimation` Script ###
+    { OPTIONAL: } All the same as in the Main Hand section.
+     > Don't reverse Show and Hide. The Sheath correctly uses Show when Sheathed, Hide when Drawn.
+
+[ HUD ATTACHMENT: ]
+
+    ##1: `[ MWS Util ] Toggle/Menu HUD` Object ###
+     > This object is a small, two-button HUD that works with all weapons using this set of scripts.
+     > The HUD requires a small amount of configuration, adding your Avatar UUID for the chat filtering system.
+     -> You may optionally change 0 to a Weapon Number the Prim Names of the HUD Buttons, to create Weapon-Specific instead of Creator-Specific HUDs.
+     -> In a future update, the HUD will be modified to perform more functions.
+
+[ MISCELLANEOUS ITEM INFORMATION: ]
+
+ # Information on the purpose of otherwise un-described Objects included in the Package.
+
+    ##1: `[ Melee Weapon Scriptset ] AdBoard` Object ###
+     > This is a simple Advertisement Board you can place in your store to show your support for this Project. When clicked, it gives a link to the SecondLife Marketplace.
+
+    ##2: `[ BloodBurst ]` Object ###
+    ##3: `[ DustBurst ]` Object ###
+    ##4: `[ FlameBurst ]` Object ###
+    ##5: `[ FrostBurst ]` Object ###
+     > These objects are example HitEffect Particle Emitter Objects that may be used as part of the `[ MWS Master ] MainHand` Script's Animation and Sound Configuration.
