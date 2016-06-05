@@ -1,31 +1,3 @@
-//~ BEGIN COPYRIGHT, LICENSE AND WARRANTY DISCLAIMER
-// # [Asbrandt] Melee Weapon Scriptset - v2.5.4 - u20.Nov.2013 - Copyright (c) 2009-2013 Timber Wolfe - Asbrandt.TW@Gmail.com (EMail), Asbrandt Resident (@SecondLife), Asbrandt Aeon (@Avination)
-//  > Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction,
-//    including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
-//    to do so, subject to the condition that the above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-//
-// # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-//   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
-//   OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-//~ BEGIN CODE CONTRIBUTIONS
-// # Dimentox Travanti (@SecondLife) - Providing the DCS2 Personal/HUD Channel formula.
-//
-//~ BEGIN NON-CODE CONTRIBUTIONS
-// # None at this time.
-//
-//~ BEGIN MISC NOTICES
-// # While this project is released under the permissive MIT X11 License, attribution is greatly appreciated and helps development because users provide input for improvement:
-//  > The simplest means to provide attribution is to include the following line in a prominent location, such as your Marketplace listing and/or documentation files;
-//   "Scripted with the OpenSource [Asbrandt] Melee Weapon Scriptset; https://marketplace.secondlife.com/stores/110772"
-//  > The full copyright notice is NOT required to be displayed anywhere other than within the Software itself, the above line is sufficient for the optional attribution.
-//
-//~ BEGIN CODE
-
-// NOTE - A Basic Alpha function is built into this script that changes the entire Linkset to one Value. The MultiAlpha plugin provides more complex functionality.
-// NOTE - Color and Glow functions are not built-in to this script. If they are needed, use the included MultiColor and/or MultiGlow plugins.
-// HINT - If you need to find your Avatar UUID, rez a new prim, create a new script inside and replace its contents with: default{state_entry(){llOwnerSay((string)llGetOwner());llDie();}}
-
 ///BEGIN CONFIG///
 //-System-//
 string osWeaponCreator = "26b8ddea-ee70-470c-8303-39baacceadd7";                                    // Comms Filter - This should be your Avatar UUID. This needs to match in MainHand, OffHand, Sheath and HUD Scripts.
@@ -438,7 +410,7 @@ default
         else if( eiPerms & 0x00000020 ) { llDetachFromAvatar(); }
     }
 
-    listen(integer eiChannel, string esName, key ekID, string esMessage) 
+    listen(integer eiChannel, string esName, key ekID, string esMessage)
     {
         if( llGetOwnerKey(ekID) == gkOwnerKey )
         {
